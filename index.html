@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="weather-app" id="weather-app">
+        <div class="container id" id="container">
+            <h3 class="brand">the weather</h3>
+            <div>
+                <h1 class="temp" id="temp">16&#176;</h1>
+                <div class="city-time" id="city-time">
+                    <h1 class="name" id="name">Delhi</h1>
+                    <small>
+                        <span class="time" id="time">06:09</span>
+                        -
+                        <span class="date" id="date">
+                            Monday Sep 19
+                        </span>
+                    </small>
+                </div>
+                <div class="weather" id="weather">
+                    <img src="./icons/day/113.png" class="icon" id="icon" alt="icon" width="50" height="50" />
+                    <span class="condition" id="condition">Cloudy</span>
+                </div>
+            </div>
+        </div>
+        <div class="panel" id="panel">
+            <form id="locationInput">
+                <input type="text" class="search" id="search" placeholder="Search Location..." />
+                <button type="submit" class="submit" id="submit"> 
+                    Search
+                    <!-- <i class="fas fa-search"></i> -->
+                    <!-- <i class='bx bx-search'></i> -->
+                    <!-- <box-icon name='search' flip='horizontal' ></box-icon> -->
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
+
+            <ul class="cities" id="cities">
+                <li class="city">New York</li> 
+                <li class="city">California</li>
+                <li class="city">Paris</li>
+                <li class="city">Tokyo</li>
+            </ul>
+
+            <ul class="details" id="details">
+                <h4>weather Details</h4>
+                <li>
+                    <span>Cloudy</span>
+                    <span class="cloud" id="cloud">89%</span>
+                </li>
+                <li>
+                    <span>Humidity</span>
+                    <span class="humidity" id="humidity">64%</span>
+                </li>
+                <li>
+                    <span>Wind</span>
+                    <span class="wind" id="wind">8km/h</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>
