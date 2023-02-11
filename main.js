@@ -65,36 +65,10 @@ submit.addEventListener("click", (e) => {
     }
 });
 
-// will use this function later
-function dayOfTheWeek(day, month, year) {
-    const weekday = [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday"
-    ];
-    return weekday[new Date(`${day}/${month}/${year}`).getDay()];
-};
 
-// function that fetch and display the data from weather API
-
-// const options = {
-// 	method: 'GET',
-// 	headers: {
-// 		'X-RapidAPI-Key': '7c9beea993msh1aa186731e3bbe7p105f7ejsn25cb1def6738',
-// 		'X-RapidAPI-Host': 'weather-by-api-ninjas.p.rapidapi.com'
-// 	}
-// };
-
-// fetch('https://weather-by-api-ninjas.p.rapidapi.com/v1/weather?city=${cityInput}', options)
-// 	.then(response => response.json())
-// 	.then(response => console.log(response))
-// 	.catch(err => console.error(err));
 const getWeatherData = async () => {
     // Use the try-catch block to handle errors
+    
     try {
       // Create a const that stores the user input from the searchbar or defaults back to 'Los Angeles' if left blank
       var city;
@@ -106,7 +80,7 @@ const getWeatherData = async () => {
       {
         city = search.value;
       }
-    //   const city = search.value || 'Delhi';
+      // const city = search.value || 'Delhi';
         
       // console.log(city);
 
@@ -149,15 +123,13 @@ const getWeatherData = async () => {
 
   const updateDom = data => {
     console.log('🔥 updating', data)
+
     // Current temperature
-
-
-
     temp.innerHTML = Math.round(( data[0].main.temp.toFixed(1) - 32 )*(5/9)) + "&#176;";
   
     // Weather Icon
     // Use template literals to insert the in the below link, then set it as image source:
-    // https://openweathermap.org/img/wn/API_RESPONSE_DATA@2x.png
+    //  https://openweathermap.org/img/wn/API_RESPONSE_DATA@2x.png
     icon.src = `https://openweathermap.org/img/wn/${data[0].weather[0].icon}@2x.png`
   
     // Description of the Current Weather
@@ -169,51 +141,15 @@ const getWeatherData = async () => {
     // name output
     nameOutput.innerHTML = data[0].name
   
-    // Wind Direction (Use the getDirection function)
-    // windDirection.innerText = getDirection(data[0].wind.deg)
-  
-    // Lowest Temperature of the Day
-    // lowestToday.innerText = Math.round(data[0].main.temp_min)
-  
-    // Highest Temperature of the Day
-    // highestToday.innerText = Math.round(data[0].main.temp_max)
-  
-    // Pressure
-    // pressure.innerText = data[0].main.pressure
-  
+    
     // Humidity
     humidityOutput.innerHTML = data[0].main.humidity + "%"
   
-    // Save both Sunrise and Sunset time in a variable as Milliseconds
-    // Hint: the data from the API is in seconds
-    // const sunriseTs = new Date(data[0].sys.sunrise * 1000)
-    // const sunsetTs = new Date(data[0].sys.sunset * 1000)
-  
-    // Use the Sunrise Time in Milliseconds to get Sunrise Time
-    // use the .toLocaleString() method to get the time in a readable format
-    // sunrise.innerText = sunriseTs.toLocaleTimeString('en-US', {
-    //   hour: 'numeric',
-    //   minute: 'numeric',
-    // })
-  
-    // // Do the same for Sunset
-    // sunset.innerText = sunsetTs.toLocaleTimeString('en-US', {
-    //   hour: 'numeric',
-    //   minute: 'numeric',
-    // })
-  
-    // Using timeago.js, create relative timestamps for both sunrise and sunset
-    // sunriseRelative.innerText = timeago.format(sunriseTs)
-    // sunsetRelative.innerText = timeago.format(sunsetTs)
+   
   
     // Get the location of the user from the API (When you type, it's probably not formatted)
     nameOutput.innerHTML = data[0].name
   
-    // Get and format Current Time
-    timeOutput.innerText = new Date(Date.now()).toLocaleString('en-US', {
-      hour: 'numeric',
-      minute: 'numeric',
-    })
   
     // Get and format Current Date
     dateOutput.innerText = new Date(Date.now()).toLocaleString('en-US', {
@@ -223,177 +159,167 @@ const getWeatherData = async () => {
       year: 'numeric',
     })
   
-    // Call the renderChart function and pass in the list array of the 2nd object in the data array
+   
+// call the getTime function to show current tiem ac to searched city
+   getTime(data[0].timezone);
+
+
+  //  weather conditions and icons
+
+
+  // get corresponding icon url for the weather and extract a part of it
+  const iconId = data[0].weather[0].icon;
+  let timeOfDay_lastchar = iconId.charAt(iconId.length-1);
+  console.log(timeOfDay_lastchar);
+  console.log(iconId);
+
+  // .substr(
+  //   "//cdn.weatherapi.com/weather/64x64/".length );
+   // reformat icon url to ur own local folder path add it to the page
+  //  icon.src = "./icons/" + iconId;
+
+       
+   // set default time of day
+   let timeOfDay = "day";
+
+   // get unique id for each weather condition
+   const code = data[0].weather[0].id;
+
+   // change to night if its night time inthe city
+   if(timeOfDay_lastchar == 'n'){
+       timeOfDay = "night";
+   }
+
+   
+   // clear
+   if(code == 800){
+    // set background img to clear if weather is clear
+    app.style.backgroundImage = `url(./images/${timeOfDay}/clear.jpg)`;
+
+    // change the button bg color if its day or night
+    btn.style.background = "#e5ba92";
+    if(timeOfDay == "night"){
+        btn.style.background = "#181e27";
+    }
+}
+
+  // same thing for cloudy weather
+  else if(
+      code == 801 ||
+      code == 802 ||
+      code == 803 ||
+      code == 804 ||
+      code == 200 ||
+      code == 201 ||
+      code == 202 ||
+      code == 210 || 
+      code == 211 ||
+      code == 212 ||
+      code == 221 ||
+      code == 230 ||
+      code == 231 ||
+      code == 232 ||
+      code == 751 ||
+      code == 761 || 
+      code == 762 ||
+      code == 771 ||
+      code == 781 
+  ) {
+      app.style.backgroundImage = `url(./images/${timeOfDay}/cloudy.jpg)`;
+      btn.style.background = "#fa6d1b";
+
+      if(timeOfDay == "night") {
+          btn.style.background = "#181e27";
+      }
     
   }
+
+  // foggy, mist, smoke, haze, dust
+  else if(
+    code == 701 ||
+    code == 711 ||
+    code == 721 ||
+    code == 731 ||
+    code == 741  
+) {
+    app.style.backgroundImage = `url(./images/${timeOfDay}/foggy.jpg)`;
+    btn.style.background = "#565454";
+
+    if(timeOfDay == "night") {
+        btn.style.background = "#444445";
+    }
   
-  // Create a function that renders the chart
+}
+
+  // rainy
+  else if(
+      code == 500 ||
+      code == 501 ||
+      code == 502 ||
+      code == 503 ||
+      code == 504 ||
+      code == 511 ||
+      code == 520 ||
+      code == 521 ||
+      code == 522 ||
+      code == 531 ||
+      code == 300 ||
+      code == 301 ||
+      code == 302 ||
+      code == 310 ||
+      code == 311 ||
+      code == 312 ||
+      code == 313 ||
+      code == 314 ||
+      code == 321 
+  ) {
+      app.style.backgroundImage = `url(./images/${timeOfDay}/rainy.jpg)`;
+      btn.style.background = "#647d75";
+
+      if(timeOfDay == "night"){
+          btn.style.background = "#325c80";
+      }
+  }
+
+  // snowy
+  else {
+      app.style.backgroundImage = `url(./images/${timeOfDay}/snowy.jpg)`;
+      btn.style.background = "#4d72aa";
+
+      if(timeOfDay == "night") {
+          btn.style.background = "#1b1b1b";
+      }
+  }
+
+  }
+  
+  // getTime AC to timeZone avilable in data[0]
+  const getTime = (timezone) => {
+    const localTime = new Date().getTime()
+    const localOffset = new Date().getTimezoneOffset() * 60000
+    const currentUtcTime = localOffset + localTime
+    const cityOffset = currentUtcTime + 1000 * timezone
+    const cityTime = new Date(cityOffset).toTimeString().split(' ')
+    const cityDate = new Date(cityOffset).toDateString().split(' ')
+    // console.log(formatTime(cityTime[0]));
+    timeOutput.innerText = formatTime(cityTime[0]);
+
+    // console.log(cityDate);
+  }
+
+  // Format time with AM AND PM
+  function formatTime(timeString) {
+    const [hourString, minute] = timeString.split(":");
+    const hour = +hourString % 24;
+    return (hour % 12 || 12) + ":" + minute + (hour < 12 ? " AM" : " PM");
+}
   
   
   // Call the getWeatherData function
   getWeatherData()
-/*
-function fetchWeatherData() {
 
-    // fetch('https://weather-by-api-ninjas.p.rapidapi.com/v1/weather?city=${cityInput}', options)
-	// .then(response => response.json())
-	// .then(response => console.log(response))
-	// .catch(err => console.error(err));
 
-    // try {
-    //     // Create a const that stores the user input from the searchbar or defaults back to 'Los Angeles' if left blank
-    //     const city = searchInput.value || 'Los Angeles'
+  // app.style.opacity = "0";
+   
+
     
-    //     // Create 2 promises that call the APIs and pass in the city name
-    //     // If the user haven't typed anything, use Los Angeles as default
-    //     const currentWeather = new Promise(async (resolve, reject) => {
-    //       try {
-    //         const weatherApiData = await fetch(
-    //           `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=8109965e7254a469d08a746e8b210e1e&units=imperial`,
-    //         )
-    
-    //         resolve(await weatherApiData.json())
-    //       } catch (error) {
-    //         reject()
-    //       }
-    //     })
-
-    // fetch(`http://api.weatherapi.com/v1/current.json?key=104bf291bab1463abf4120209230401=${cityInput}`)
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=8109965e7254a469d08a746e8b210e1e&units=imperial`)
-
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-
-        // add temperature and weather condition
-        temp.innerHTML = data.current.temp_c + "&#176;";
-        conditionOutput.innerHTML = data.current.condition.text;
-    
-        // get date and time
-        const date = data.location.localtime;
-        const y = parseInt(date.substr(0,4));
-        const m = parseInt(date.substr(5,2));
-        const d = parseInt(date.substr(8,2));
-        const time = date.substr(11);
-    
-        // reformat this
-        dateOutput.innerHTML = `${dayOfTheWeek(d, m, y)} ${d}, ${m}, ${y}`;
-        timeOutput.innerHTML = time;
-    
-        // add name of city into page
-        nameOutput.innerHTML = data.location.name;
-    
-        // get corresponding icon url for the weather and extract a part of it
-        const iconId = data.current.condition.icon.substr(
-            "//cdn.weatherapi.com/weather/64x64/".length );
-
-        // reformat icon url to ur own local folder path add it to the page
-        icon.src = "./icons/" + iconId;
-
-        // add the weather details to the page
-        cloudOutput.innerHTML = data.current.cloud + "%";
-        humidityOutput.innerHTML = data.current.humidity + "%";
-        windOutput.innerHTML = data.current.wind_kph + "km/h";
-
-        // set default time of day
-        let timeOfDay = "day";
-
-        // get unique id for each weather condition
-        const code = data.current.condition.code;
-
-        // change to night if its night time inthe city
-        if(!data.current.is_day){
-            timeOfDay = "night";
-        }
-
-        if(code == 1000){
-            // set background img to clear if weather is clear
-            app.style.backgroundImage = `url(./images/${timeOfDay}/clear.jpg)`;
-
-            // change the button bg color if its day or night
-            btn.style.background = "#e5ba92";
-            if(timeOfDay == "night"){
-                btn.style.background = "#181e27";
-            }
-        }
-
-        // same thing for cloudy weather
-        else if(
-            code == 1003 ||
-            code == 1006 ||
-            code == 1009 ||
-            code == 1030 ||
-            code == 1069 ||
-            code == 1087 ||
-            code == 1135 ||
-            code == 1273 || 
-            code == 1276 ||
-            code == 1279 ||
-            code == 1284
-        ) {
-            app.style.backgroundImage = `url(./images/${timeOfDay}/cloudy.jpg)`;
-            btn.style.background = "#fa6d1b";
-
-            if(timeOfDay == "night") {
-                btn.style.background = "#181e27";
-            }
-           
-        }
-        else if(
-            code == 1063 ||
-            code == 1069 ||
-            code == 1072 ||
-            code == 1150 ||
-            code == 1153 ||
-            code == 1180 ||
-            code == 1183 ||
-            code == 1186 ||
-            code == 1189 ||
-            code == 1192 ||
-            code == 1195 ||
-            code == 1204 ||
-            code == 1207 ||
-            code == 1240 ||
-            code == 1243 ||
-            code == 1246 ||
-            code == 1249 ||
-            code == 1252 
-        ) {
-            app.style.backgroundImage = `url(./images/${timeOfDay}/rainy.jpg)`;
-            btn.style.background = "#647d75";
-
-            if(timeOfDay == "night"){
-                btn.style.background = "#325c80";
-            }
-        }
-        else {
-            app.style.backgroundImage = `url(./images/${timeOfDay}/snowy.jpg)`;
-            btn.style.background = "#4d72aa";
-
-            if(timeOfDay == "night") {
-                btn.style.background = "#1b1b1b";
-            }
-        }
-
-        // fade in the page once all is done
-        app.style.opacity = "1";
-    })
-
-    // if user types city that doesnt exist throw an alert
-    .catch(() => {
-        alert(`city not found, please try again`);
-        app.style.opacity = "1";
-    });
-
-}
-
-// call the function of page load
-fetchWeatherData();
-
-// fade in the page
-app.style.opacity = "1";
-*/
-
-
-
-
